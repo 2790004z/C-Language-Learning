@@ -1,5 +1,0 @@
-# ninja log v5
-196	240	1689483977834216838	GameExercise	42fc0d2e3142f83e
-0	196	1689483977787816521	CMakeFiles/GameExercise.dir/test.c.o	9f5384c07e0a782c
-1	195	1689483977788162558	CMakeFiles/GameExercise.dir/game.c.o	c220f36bced6f750
-10	70	1689484193307010290	build.ninja	fb17c717b0c38f46
