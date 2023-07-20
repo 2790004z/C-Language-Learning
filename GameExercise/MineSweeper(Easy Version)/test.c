@@ -8,28 +8,28 @@ void mainMenu() {
 }
 
 void game(){
-    char mine[BOARD_SIZE][BOARD_SIZE] = {0};
-    char show[BOARD_SIZE][BOARD_SIZE] = {0};
+    char mineBoard[BOARD_SIZE][BOARD_SIZE] = {0};
+    char displayBoard[BOARD_SIZE][BOARD_SIZE] = {0};
 
     // Initialisation and Set Mine in Map
-    initialGame(mine, show, BOARD_SIZE);
+    initialGame(mineBoard, displayBoard, BOARD_SIZE);
     // Display game board
-    displayGameBoard(show, MAP_SIZE);
+    displayGameBoard(displayBoard, MAP_SIZE);
     // Start Search Mine
-    gameBody(mine, show, MAP_SIZE, EASY);
+    gameBody(mineBoard, displayBoard, MAP_SIZE, EASY);
 }
 
 
 int main() {
     // Set the start point of the random number;
     srand((unsigned int) time(NULL));
-    int input = 0;
+    int option = 0;
     do{
         mainMenu();
         printf("Enter Your Choice:>");
-        scanf("%d", &input);
+        scanf("%d", &option);
 
-        switch (input) {
+        switch (option) {
             case 1:
                 printf("Welcome!\n");
                 game();
@@ -41,6 +41,6 @@ int main() {
                 printf("Error\n");
                 break;
         }
-    } while (input);
+    } while (option);
     return 0;
 }

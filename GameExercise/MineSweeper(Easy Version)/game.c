@@ -4,17 +4,17 @@
 
 #include "game.h"
 
-void initialGame(char mine[BOARD_SIZE][BOARD_SIZE], char show[BOARD_SIZE][BOARD_SIZE], int boardSize) {
+void initialGame(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_SIZE][BOARD_SIZE], int boardSize) {
     for (int row = 0; row < boardSize; row++) {
         for (int col = 0; col < boardSize; col++) {
-            mine[row][col] = NONE_MINE;
-            show[row][col] = INIT_SHOW;
+            mineBoard[row][col] = NONE_MINE;
+            displayBoard[row][col] = INIT_SHOW;
         }
     }
-    setMine(mine, MAP_SIZE, EASY);
+    setMine(mineBoard, MAP_SIZE, EASY);
 }
 
-void displayGameBoard(char show[BOARD_SIZE][BOARD_SIZE], int mapSize) {
+void displayGameBoard(char displayBoard[BOARD_SIZE][BOARD_SIZE], int mapSize) {
     printf("----------Game Board----------\n");
     for (int col = 0; col <= mapSize; col++) {
         printf("%d  ", col);
@@ -23,59 +23,61 @@ void displayGameBoard(char show[BOARD_SIZE][BOARD_SIZE], int mapSize) {
     for (int row = 1; row <= mapSize; row++) {
         printf("%d  ", row);
         for (int col = 1; col <= mapSize; col++) {
-            printf("%c  ", show[row][col]);
+            printf("%c  ", displayBoard[row][col]);
         }
         printf("\n");
     }
     printf("----------------------------\n");
 }
 
-void setMine(char mine[BOARD_SIZE][BOARD_SIZE], int mapSize, int amount) {
+void setMine(char mineBoard[BOARD_SIZE][BOARD_SIZE], int mapSize, int amount) {
     while (amount) {
         int row = rand() % mapSize + 1;
         int col = rand() % mapSize + 1;
-        if (mine[row][col] == NONE_MINE) {
-            mine[row][col] = MINE;
+        if (mineBoard[row][col] == NONE_MINE) {
+            mineBoard[row][col] = MINE;
             amount--;
         }
     }
 }
 
-void markMine(char show[BOARD_SIZE][BOARD_SIZE], int rowToMark, int colToMark, int mapSize){
-    if (show[rowToMark][colToMark] == INIT_SHOW) {
+void markMine(char displayBoard[BOARD_SIZE][BOARD_SIZE], int rowToMark, int colToMark, int mapSize){
+    if (displayBoard[rowToMark][colToMark] == INIT_SHOW) {
         printf("Marked (%d, %d).\n", rowToMark, colToMark);
-        show[rowToMark][colToMark] = MARK;
-    }else if (show[rowToMark][rowToMark] == MARK){
-        printf("(%d, %d) mark canceled.\n", rowToMark, colToMark);
-        show[rowToMark][colToMark] = INIT_SHOW;
+        displayBoard[rowToMark][colToMark] = MARK;
+    } else {
+        if (displayBoard[rowToMark][rowToMark] == MARK){
+            printf("(%d, %d) mark canceled.\n", rowToMark, colToMark);
+            displayBoard[rowToMark][colToMark] = INIT_SHOW;
+        }
     }
-    displayGameBoard(show, mapSize);
+    displayGameBoard(displayBoard, mapSize);
 }
 
-int getMineData(char mine[BOARD_SIZE][BOARD_SIZE], int rowIndex, int colIndex) {
+int getMineData(char mineBoard[BOARD_SIZE][BOARD_SIZE], int rowIndex, int colIndex) {
     int result = 0;
     for (int rowCounter = -1; rowCounter <= 1; rowCounter++) {
         for (int colCounter = -1; colCounter <= 1; colCounter++) {
-            if (mine[rowCounter + rowIndex][colCounter + colIndex] == MINE) result++;
+            if (mineBoard[rowCounter + rowIndex][colCounter + colIndex] == MINE) result++;
         }
     }
     return result;
 }
 
-void autoSearch(char mine[BOARD_SIZE][BOARD_SIZE], char show[BOARD_SIZE][BOARD_SIZE], int rowToSearch, int colToSearch, int *winCounter, int mapSize) {
+void autoSearch(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_SIZE][BOARD_SIZE], int rowToSearch, int colToSearch, int *winCounter, int mapSize) {
     if (rowToSearch > 0 && rowToSearch <= mapSize && colToSearch > 0 && colToSearch <= mapSize) {
-        if (mine[rowToSearch][colToSearch] != SEARCHED) {
-            mine[rowToSearch][colToSearch] = SEARCHED;
+        if (mineBoard[rowToSearch][colToSearch] != SEARCHED) {
+            mineBoard[rowToSearch][colToSearch] = SEARCHED;
 
-            if (getMineData(mine, rowToSearch, colToSearch)) {
-                show[rowToSearch][colToSearch] = '0' + getMineData(mine, rowToSearch, colToSearch);
+            if (getMineData(mineBoard, rowToSearch, colToSearch)) {
+                displayBoard[rowToSearch][colToSearch] = '0' + getMineData(mineBoard, rowToSearch, colToSearch);
                 (*winCounter)--;
             } else {
-                show[rowToSearch][colToSearch] = ' ';
+                displayBoard[rowToSearch][colToSearch] = ' ';
                 (*winCounter)--;
                 for (int rowCounter = -1; rowCounter <= 1; rowCounter++) {
                     for (int colCounter = -1; colCounter <= 1; colCounter++) {
-                        autoSearch(mine, show, rowToSearch + rowCounter, colToSearch + colCounter, winCounter, mapSize);
+                        autoSearch(mineBoard, displayBoard, rowToSearch + rowCounter, colToSearch + colCounter, winCounter, mapSize);
                     }
                 }
             }
@@ -83,7 +85,21 @@ void autoSearch(char mine[BOARD_SIZE][BOARD_SIZE], char show[BOARD_SIZE][BOARD_S
     }
 }
 
-void gameBody(char mine[BOARD_SIZE][BOARD_SIZE], char show[BOARD_SIZE][BOARD_SIZE], int mapSize, int difficulty) {
+bool searchMine(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_SIZE][BOARD_SIZE], int rowToSearch, int colToSearch, int mapSize, int *winCounter) {
+    if (rowToSearch < 1 || rowToSearch > mapSize || colToSearch < 1 || colToSearch > mapSize) {
+        printf("Invalid coordinate, please reenter.\n");
+    } else {
+        if (mineBoard[rowToSearch][colToSearch] == MINE) {
+            return true;
+        } else {
+            autoSearch(mineBoard, displayBoard, rowToSearch, colToSearch, winCounter, mapSize);
+            displayGameBoard(displayBoard, mapSize);
+        }
+    }
+    return false;
+}
+
+void gameBody(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_SIZE][BOARD_SIZE], int mapSize, int difficulty) {
     int winCounter = mapSize * mapSize - difficulty;
     bool isEnd = false;
 
@@ -104,10 +120,10 @@ void gameBody(char mine[BOARD_SIZE][BOARD_SIZE], char show[BOARD_SIZE][BOARD_SIZ
 
         switch (operation) {
             case 1:
-                isEnd = searchMine(mine, show, rowToOperate, colToOperate, mapSize, &winCounter);
+                isEnd = searchMine(mineBoard, displayBoard, rowToOperate, colToOperate, mapSize, &winCounter);
                 break;
             case 2:
-                markMine(show, rowToOperate, colToOperate, mapSize);
+                markMine(displayBoard, rowToOperate, colToOperate, mapSize);
                 break;
             default:
                 printf("Error, reenter your choice.\n");
@@ -119,18 +135,5 @@ void gameBody(char mine[BOARD_SIZE][BOARD_SIZE], char show[BOARD_SIZE][BOARD_SIZ
     } else {
         printf("You lose! Game over!\n");
     }
-}
-
-bool searchMine(char mine[BOARD_SIZE][BOARD_SIZE], char show[BOARD_SIZE][BOARD_SIZE], int rowToSearch, int colToSearch, int mapSize, int *winCounter) {
-    if (rowToSearch < 1 || rowToSearch > mapSize || colToSearch < 1 || colToSearch > mapSize) {
-        printf("Invalid coordinate, please reenter.\n");
-    } else {
-        if (mine[rowToSearch][colToSearch] == MINE) {
-            return true;
-        } else {
-            autoSearch(mine, show, rowToSearch, colToSearch, winCounter, mapSize);
-            displayGameBoard(show, mapSize);
-        }
-    }
-    return false;
+    displayGameBoard(mineBoard, mapSize);
 }
