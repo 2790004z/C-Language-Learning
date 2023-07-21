@@ -16,16 +16,33 @@ void initialGame(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], cha
 void displayGameBoard(char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int mapSize) {
     printf("----------Game Board----------\n");
     for (int col = 0; col <= mapSize; col++) {
-        printf("%d  ", col);
+        printf("%2d ｜", col);
     }
     printf("\n");
+
+    for (int col = 0; col <= mapSize; col++){
+        printf("-----");
+    }
+    printf("\n");
+
+
     for (int row = 1; row <= mapSize; row++) {
-        printf("%d  ", row);
+        printf("%2d |", row);
         for (int col = 1; col <= mapSize; col++) {
-            printf("%c  ", displayBoard[row][col]);
+            printf(" %2c |", displayBoard[row][col]);
+        }
+        printf(" %2d |", row);
+        printf("\n");
+        for (int col = 0; col <= mapSize; col++){
+            printf("-----");
         }
         printf("\n");
     }
+
+    for (int col = 0; col <= mapSize; col++){
+        printf("-----");
+    }
+    printf("\n");
     printf("----------------------------\n");
 }
 
