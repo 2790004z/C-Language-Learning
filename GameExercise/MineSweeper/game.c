@@ -4,44 +4,62 @@
 
 #include "game.h"
 
-void initialGame(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_SIZE][BOARD_SIZE], int boardSize) {
+void initialGame(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE],
+                 char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE],
+                 int boardSize) {
     for (int row = 0; row < boardSize; row++) {
         for (int col = 0; col < boardSize; col++) {
             mineBoard[row][col] = NONE_MINE;
             displayBoard[row][col] = INIT_SHOW;
         }
     }
-    setMine(mineBoard, MAP_SIZE, EASY);
 }
 
-void displayGameBoard(char displayBoard[BOARD_SIZE][BOARD_SIZE], int mapSize) {
+void displayGameBoard(char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int mapSize) {
     printf("----------Game Board----------\n");
     for (int col = 0; col <= mapSize; col++) {
-        printf("%d  ", col);
+        printf("%2d ｜", col);
     }
     printf("\n");
+
+    for (int col = 0; col <= mapSize; col++){
+        printf("-----");
+    }
+    printf("\n");
+
+
     for (int row = 1; row <= mapSize; row++) {
-        printf("%d  ", row);
+        printf("%2d |", row);
         for (int col = 1; col <= mapSize; col++) {
-            printf("%c  ", displayBoard[row][col]);
+            printf(" %2c |", displayBoard[row][col]);
+        }
+        printf(" %2d |", row);
+        printf("\n");
+        for (int col = 0; col <= mapSize; col++){
+            printf("-----");
         }
         printf("\n");
     }
+
+    for (int col = 0; col <= mapSize; col++){
+        printf("-----");
+    }
+    printf("\n");
     printf("----------------------------\n");
 }
 
-void setMine(char mineBoard[BOARD_SIZE][BOARD_SIZE], int mapSize, int amount) {
-    while (amount) {
+void setMine(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int mapSize, int mineAmount) {
+    while (mineAmount) {
         int row = rand() % mapSize + 1;
         int col = rand() % mapSize + 1;
         if (mineBoard[row][col] == NONE_MINE) {
             mineBoard[row][col] = MINE;
-            amount--;
+            mineAmount--;
         }
     }
 }
 
-void markMine(char displayBoard[BOARD_SIZE][BOARD_SIZE], int rowToMark, int colToMark, int mapSize){
+void markMine(char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int rowToMark, int colToMark, int mapSize){
     if (displayBoard[rowToMark][colToMark] == INIT_SHOW) {
         printf("Marked (%d, %d).\n", rowToMark, colToMark);
         displayBoard[rowToMark][colToMark] = MARK;
@@ -54,7 +72,7 @@ void markMine(char displayBoard[BOARD_SIZE][BOARD_SIZE], int rowToMark, int colT
     displayGameBoard(displayBoard, mapSize);
 }
 
-int getMineData(char mineBoard[BOARD_SIZE][BOARD_SIZE], int rowIndex, int colIndex) {
+int getMineData(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int rowIndex, int colIndex) {
     int result = 0;
     for (int rowCounter = -1; rowCounter <= 1; rowCounter++) {
         for (int colCounter = -1; colCounter <= 1; colCounter++) {
@@ -64,7 +82,9 @@ int getMineData(char mineBoard[BOARD_SIZE][BOARD_SIZE], int rowIndex, int colInd
     return result;
 }
 
-void autoSearch(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_SIZE][BOARD_SIZE], int rowToSearch, int colToSearch, int *winCounter, int mapSize) {
+void autoSearch(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE],
+                char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE],
+                int rowToSearch, int colToSearch, int *winCounter, int mapSize) {
     if (rowToSearch > 0 && rowToSearch <= mapSize && colToSearch > 0 && colToSearch <= mapSize) {
         if (mineBoard[rowToSearch][colToSearch] != SEARCHED) {
             mineBoard[rowToSearch][colToSearch] = SEARCHED;
@@ -85,7 +105,7 @@ void autoSearch(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_
     }
 }
 
-bool searchMine(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_SIZE][BOARD_SIZE], int rowToSearch, int colToSearch, int mapSize, int *winCounter) {
+bool searchMine(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int rowToSearch, int colToSearch, int mapSize, int *winCounter) {
     if (rowToSearch < 1 || rowToSearch > mapSize || colToSearch < 1 || colToSearch > mapSize) {
         printf("Invalid coordinate, please reenter.\n");
     } else {
@@ -99,13 +119,14 @@ bool searchMine(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_
     return false;
 }
 
-void gameBody(char mineBoard[BOARD_SIZE][BOARD_SIZE], char displayBoard[BOARD_SIZE][BOARD_SIZE], int mapSize, int difficulty) {
-    int winCounter = mapSize * mapSize - difficulty;
+void gameBody(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int mapSize, int mineAmount) {
+    int winCounter = mapSize * mapSize - mineAmount;
     bool isEnd = false;
 
     while (winCounter && !isEnd) {
         printf("\n");
         printf("------------------------------\n");
+        
         printf("--------1. Search Mine--------\n");
         printf("---------2. Mark Mine---------\n");
         printf("------------------------------\n");
