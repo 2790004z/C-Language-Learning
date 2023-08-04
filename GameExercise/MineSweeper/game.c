@@ -4,9 +4,13 @@
 
 #include "game.h"
 
+<<<<<<< HEAD
 void initialGame(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE],
                  char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE],
                  int boardSize) {
+=======
+void initialGame(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int boardSize) {
+>>>>>>> origin/main
     for (int row = 0; row < boardSize; row++) {
         for (int col = 0; col < boardSize; col++) {
             mineBoard[row][col] = NONE_MINE;
@@ -82,9 +86,13 @@ int getMineData(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int 
     return result;
 }
 
+<<<<<<< HEAD
 void autoSearch(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE],
                 char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE],
                 int rowToSearch, int colToSearch, int *winCounter, int mapSize) {
+=======
+void autoSearch(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], char displayBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], int rowToSearch, int colToSearch, int *winCounter, int mapSize) {
+>>>>>>> origin/main
     if (rowToSearch > 0 && rowToSearch <= mapSize && colToSearch > 0 && colToSearch <= mapSize) {
         if (mineBoard[rowToSearch][colToSearch] != SEARCHED) {
             mineBoard[rowToSearch][colToSearch] = SEARCHED;
@@ -157,4 +165,8 @@ void gameBody(char mineBoard[DIFFICULT_BOARD_SIZE][DIFFICULT_BOARD_SIZE], char d
         printf("You lose! Game over!\n");
     }
     displayGameBoard(mineBoard, mapSize);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main
