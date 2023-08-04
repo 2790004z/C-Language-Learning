@@ -193,15 +193,6 @@ CMAKE_STRIP:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/strip
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-MineSweeper_Easy_Version__BINARY_DIR:STATIC=/Users/easonzhang/Desktop/C-Language-Learning/GameExercise/MineSweeper/cmake-build-debug
-
-//Value Computed by CMake
-MineSweeper_Easy_Version__IS_TOP_LEVEL:STATIC=ON
-
-//Value Computed by CMake
-MineSweeper_Easy_Version__SOURCE_DIR:STATIC=/Users/easonzhang/Desktop/C-Language-Learning/GameExercise/MineSweeper
-
-//Value Computed by CMake
 MineSweeper__BINARY_DIR:STATIC=/Users/easonzhang/Desktop/C-Language-Learning/GameExercise/MineSweeper/cmake-build-debug
 
 //Value Computed by CMake

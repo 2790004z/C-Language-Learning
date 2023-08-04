@@ -1,3 +1,0 @@
-/Users/easonzhang/Desktop/MineSweeper/cmake-build-debug/CMakeFiles/MineSweeper_Easy_Version_.dir
-/Users/easonzhang/Desktop/MineSweeper/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/easonzhang/Desktop/MineSweeper/cmake-build-debug/CMakeFiles/rebuild_cache.dir
